@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "../../../lib_mrpiz-v0.3"
+		},
+		{
+			"path": "../.."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"robot.h": "c"
+		}
+	}
+}
