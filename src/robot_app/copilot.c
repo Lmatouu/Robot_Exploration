@@ -56,10 +56,16 @@ extern int copilot_is_path_completed(void) {
 extern int copilot_create_path(int steps_nb) {
   if ((path == NULL) && (steps_nb > 0)) // dont'allocate if path already existing
   {
+
     /*TODO: allocate path, */
     /* why calloc is better than malloc ? */
+
+	path = (move *) calloc(steps_nb, sizeof(move));
+
     if (path != NULL) {
 	/*TODO: Update path_steps */
+	  path_steps = steps_nb;
+	  TRACE("Copilot created a new path with %d steps.\n", path_steps);
       return EXIT_SUCCESS;
     }
   }
@@ -69,8 +75,10 @@ extern int copilot_create_path(int steps_nb) {
 extern int copilot_destroy_path(void) {
   if (path != NULL) {
 	/*TODO: free memory */
+	free(path);
     path = NULL;
 	/*TODO: update path_steps */
+	path_steps = 0;
     TRACE("Copilot destroyed the current path.\n");
     return EXIT_SUCCESS;
   }
@@ -79,13 +87,21 @@ extern int copilot_destroy_path(void) {
 
 extern int copilot_add_step(int index, move step) {
 	/*TODO: check index validity before adding step */
-    return EXIT_SUCCESS;
-  return EXIT_FAILURE;
+	if( index < path_steps ){
+		path[index] = step;
+		return EXIT_SUCCESS;
+	}
+	else{
+		return EXIT_FAILURE;
+	}
 }
 
 move copilot_get_step(int index) {
 	move step = {0};
 	/*TODO: check index validity before returning step */
+	if( index < path_steps){
+		step = path[index];
+	}
   	return step;
 }
 
