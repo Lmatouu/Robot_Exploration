@@ -17,6 +17,8 @@ typedef enum {
   CMD_DESTROY_PATH,
   CMD_SHOW_PATH,
   CMD_START_PATH,
+  // CMD_SAVE_PATH,
+  // CMD_LOAD_PATH,
   CMD_QUIT,
   NB_COMMAND
 } menu_command;
@@ -118,18 +120,58 @@ static void handle_create_path() {
 static void handle_add_step() {
 	/*TODO: prompt for adequate data to call copilot_add_step(index,step); */
 	/*HINT: adding step fails if steps_number == 0 */
+  if (steps_number > 0) {
+    int index = handle_user_prompt_int(UI_ASK_STEP_NUMBER, 0, steps_number - 1);
+    int speed = handle_user_prompt_int(UI_ASK_SPEED, 0, 1000);
+    int type_move = handle_user_prompt_int(UI_ASK_TYPE_MOVE, 0, 1);
+    int value = 0;
+    if (type_move == 0) {
+      value = handle_user_prompt_int(UI_ASK_VALUE_FORWARD, 0, 1000);
+    } else {
+      value = handle_user_prompt_int(UI_ASK_VALUE_TURN, 1, 3);
+    }
+    move step;
+    step.speed = speed;
+    step.type = type_move;
+    if (type_move == 0) {
+      step.range.distance = value;
+    } else {
+      step.range.angle = value;
+    }
+    if (copilot_add_step(index, step) == EXIT_SUCCESS) {
+      print_success_message(CMD_ADD_STEP);
+    } else {
+      print_failure_message(CMD_ADD_STEP);
+    }
+  } else {
+    print_failure_message(CMD_ADD_STEP);
+  }
   
-
 }
 
 static void handle_destroy_path() {
 	/*TODO: call copilot_destroy_path(); */
 	/*HINT: steps_number is set to 0 on success to prevent adding steps to a non-existing path */
+
+  if (copilot_destroy_path() == EXIT_SUCCESS) {
+    print_success_message(CMD_DESTROY_PATH);
+    steps_number = 0;
+  } else {
+    print_failure_message(CMD_DESTROY_PATH);
+  }
 }
 
 static int handle_start_path() {
 	/*TODO: exit ui to start path */
 	/*HINT: how could you detect an empty path? (created but with no added steps?) */
+
+  if (steps_number > 0) {
+    print_success_message(CMD_START_PATH);
+    return EXIT_SUCCESS;
+  } else {
+    print_failure_message(CMD_START_PATH);
+    return EXIT_FAILURE;
+  }
 }
 
 static void handle_show_path() {
@@ -141,7 +183,7 @@ static void handle_show_path() {
       step = copilot_get_step(i);
       if (step.speed != 0) {
         if (step.type == FORWARD)
-          printf("%d : FORWARD speed:%d distance:%d \n", i, step.speed,
+          printf("%d : FORWARD speed: %d distance: %d \n", i, step.speed,
                  step.range.distance);
         else
           printf("%d : ROTATION speed : %d turn: %d \n", i, step.speed,
@@ -178,11 +220,11 @@ extern int ui_start() {
       if (handle_start_path() == EXIT_SUCCESS)
         return EXIT_SUCCESS;
       break;
-    case CMD_SAVE_PATH:
-      handle_save_path();
-      break;
-    case CMD_LOAD_PATH:
-      handle_load_path();
+    // case CMD_SAVE_PATH:
+    //   handle_save_path();
+    //   break;
+    // case CMD_LOAD_PATH:
+    //   handle_load_path();
       break;
     case CMD_QUIT:
       print_success_message(CMD_QUIT);

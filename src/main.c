@@ -10,6 +10,7 @@
 #include "robot_app/copilot.h"
 #include "robot_app/robot.h"
 #include "robot_app/pilot.h"
+#include "robot_app/ui.h"
 
 #define TEMPO	2000000
 
@@ -23,6 +24,7 @@ typedef enum{
 }process_state;
 
 static void robot_loop(void);
+
 
 /* global variable used for program clean exit */
 static process_state running = LIVE;
@@ -66,18 +68,10 @@ static void robot_loop()
 	robot_status my_status;
 
 
+	ui_start();
 	while(running)
 	{
-		copilot_create_path(6);
-		copilot_add_step(0, (move){FORWARD,{1},20});
-		copilot_add_step(1, (move){ROTATION,{U_TURN},20});
-		copilot_add_step(2, (move){FORWARD,{1},20});
-		copilot_add_step(3, (move){ROTATION,{LEFT},20});
-		copilot_add_step(4, (move){FORWARD,{1},20});
-		copilot_add_step(5, (move){ROTATION,{RIGHT},50});
-		copilot_add_step(6, (move){FORWARD,{1},20});
-
-		copilot_start_path();
+			copilot_start_path();
 		
 		my_status = robot_get_status();
 
@@ -92,10 +86,9 @@ static void robot_loop()
 			copilot_stop_at_step_completion();
 		}
 		copilot_destroy_path();
-
-
+		}
 	}
-}
+
 
 
 
