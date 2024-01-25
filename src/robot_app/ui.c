@@ -65,7 +65,7 @@ typedef enum {
 const char *prompt_messages[] = {
     "\n=== User Interface ===\n",
     "Enter your choice",
-    "Enter the numer of step in the path",
+    "Enter the number of step in the path",
     "Enter the step number",
     "Enter the speed",
     "Enter the type of move (0:Forward, 1:Rotation)",
