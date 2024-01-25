@@ -71,7 +71,7 @@ static void robot_loop()
 	ui_start();
 	while(running)
 	{
-			copilot_start_path();
+		copilot_start_path();
 		
 		my_status = robot_get_status();
 
