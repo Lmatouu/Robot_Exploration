@@ -72,6 +72,7 @@ const char *prompt_messages[] = {
     "Enter the distance to go forward",
     "Enter the type of rotation (1:left, 2:right, 3: flip turn)"};
 
+// Static functions
 static void print_prompt_message(id_message_prompt id) {
   printf("%s\n", prompt_messages[id]);
 }
