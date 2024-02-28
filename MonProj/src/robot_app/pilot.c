@@ -6,6 +6,7 @@
 #define FORWARD_STEP 142
 #define ANGLE_STEP	221
 
+//test git2 a ne pas commit
 #define SENSOR_THRESHOLD	120
 
 static move_status robot_moving = DONE;
